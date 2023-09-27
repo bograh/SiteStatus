@@ -12,23 +12,22 @@ def index():
         url = request.form.get('link', default_value)
         return redirect(url_for('check_status', url=url))
 
-    
     return render_template("index.html")
 
 
 @app.route("/<path:url>")
-def check_status(url):
-    if "http://" in url:
-        url = url
-    else:
+def check_status(url): # mETHOD CHECT SITE STATUS
+    if "http://" not in url: 
         url = f"http://{url}"
     
     res = reqs.get(url, timeout=45)
-    return f"URL: {url}\nStatus: {res.status_code}"
+    status = res.status_code
+
+    return f"URL: {url}\nStatus: {status}"
 
 @app.route("/test")
 def show_test():
-    return render_template('test.html', site="GOOGLE")
+    return render_template('test.html', site="GOOGLE", link="https://www.google.com/")
 
 
 
