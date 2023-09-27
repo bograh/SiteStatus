@@ -17,8 +17,9 @@ def index():
 
 @app.route("/<path:url>")
 def check_status(url):  # METHOD CHECKS SITE STATUS
-    if "http://" not in url:
-        url = f"http://{url}"
+    try:
+        if "http://" not in url:
+            url = f"http://{url}"
 
         res = reqs.get(url, timeout=45)
 
@@ -26,6 +27,8 @@ def check_status(url):  # METHOD CHECKS SITE STATUS
             return render_template('ok.html', link=url)
         else:
             return render_template('bad.html', link=url)
+    except Exception as ex:
+        return f'Error: {ex}'
 
 
 @app.route("/test")
