@@ -18,8 +18,12 @@ def index():
 
 @app.route("/<path:url>")
 def check_status(url):
-    res = reqs.get(url)
+    if "http://" in url:
+        url = url
+    else:
+        url = f"http://{url}"
     
+    res = reqs.get(url, timeout=45)
     return f"URL: {url}\nStatus: {res.status_code}"
 
 @app.route("/test")
