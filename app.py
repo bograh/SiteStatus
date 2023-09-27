@@ -2,8 +2,8 @@ import requests as reqs
 from flask import Flask, render_template, request, url_for, redirect
 
 
-app = Flask(__name__)       
-    
+app = Flask(__name__)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -16,19 +16,18 @@ def index():
 
 
 @app.route("/<path:url>")
-def check_status(url): # METHOD CHECKS SITE STATUS
-    if "http://" not in url: 
+def check_status(url):  # METHOD CHECKS SITE STATUS
+    if "http://" not in url:
         url = f"http://{url}"
-    
-    res = reqs.get(url, timeout=45)
-    status = res.status_code
 
-    return f"URL: {url}\nStatus: {status}"
+        res = reqs.get(url, timeout=45)
+
+        if res.status_code == 200:
+            return render_template('ok.html', link=url)
+        else:
+            return render_template('bad.html', link=url)
+
 
 @app.route("/test")
 def show_test():
     return render_template('test.html', site="GOOGLE", link="https://www.google.com/")
-
-
-
-
